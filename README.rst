@@ -417,7 +417,18 @@ control`_. This varies depending on the sender; the most common algorithms are
 HTTP protocol
 -------------
 
-If the web browser used was written by Google, instead of sending an HTTP
+Modern browsers attempt to establish a connection using HTTP/3, which is built
+on QUIC which operates over UDP and removes head-of-line blocking at the
+transport layer. If the browser supports HTTP/3 and the server advertises
+support via the Alt-Svc header, the browser:
+
+* Sends an initial QUIC handshake over UDP to establish a secure connection.
+* Negotiates encryption parameters inline using TLS 1.3.
+* Begins transmitting HTTP requests as soon as the handshake completes.
+
+If HTTP/3 fails, the browser falls back to HTTP/2 or HTTP/1.1 over TCP.
+
+If the browser is older and was written by Google, instead of sending an HTTP
 request to retrieve the page, it will send a request to try and negotiate with
 the server an "upgrade" from HTTP to the SPDY protocol.
 
